@@ -1,10 +1,70 @@
-@startuml regmap-manager
+@startuml reg-manager
 'https://plantuml.com/class-diagram
 skinparam classAttributeIconSize 0
 
 'Classes
+enum REG <<enumeration>> {
+    VIDEO
+    IMU
+    LRF
+}
+
+struct Register {
+    +address : uint32_t
+    +default_value : uint32_t
+}
+
+class RegistersMapManager {
+    -std::shared_ptr<RegisterInterface> register_interface_;
+    +setValue(REG reg, uint32_t value) : uint8_t
+    +getValue(REG reg) : uint32_t
+    +resetValue(REG reg) : uint8_t
+    +clearValue(REG reg) : uint8_t
+    +setBit(REG reg, uint8_t bit_index) : uint8_t
+    +clearBit(REG reg, uint8_t bit_index) : uint8_t
+    +getNibble(REG reg, uint8_t nibble_index) : uint8_t
+    +setNibble(REG reg, uint8_t nibble_index, uint8_t nibble_value) : uint8_t
+    +resetAll() : uint32_t
+    +clearAll() : uint32_t
+}
+
+interface RegisterInterface {
+    +{abstract} get(uint32_t address) : uint32_t
+    +{abstract} set(uint32_t address, uint32_t value) : uint8_t
+}
+
+class RegisterMock {
+    +get(uint32_t address) : uint32_t
+    +set(uint32_t address, uint32_t value) : uint8_t
+}
+
+class RegisterSpi {
+    +get(uint32_t address) : uint32_t
+    +set(uint32_t address, uint32_t value) : uint8_t
+}
+
+class RegisterDirect {
+    +get(uint32_t address) : uint32_t
+    +set(uint32_t address, uint32_t value) : uint8_t
+}
+
+object UserCode {
+    auto register_interface = std::make_shared<RegisterSpi>();
+    auto fpga_regs = std::make_shared<RegisterSpi>(register_interface);
+    \n
+    fpga_regs.resetAll();
+    fpga_regs.setValue(REG::VIDEO, 0x1234'ABCD);
+}
 
 'Relations
+UserCode -- RegistersMapManager
+RegistersMapManager o-- RegisterInterface
+RegistersMapManager -- Register
+RegistersMapManager -- REG
+RegisterInterface --|> RegisterMock
+RegisterInterface --|> RegisterSpi
+RegisterInterface --|> RegisterDirect
+
 
 'Notes
 
