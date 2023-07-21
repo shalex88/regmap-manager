@@ -1,7 +1,9 @@
 name: Release
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
 
@@ -9,12 +11,15 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  check_if_release_needed:
+  release:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
 
       - name: Get project name
         run: |
@@ -27,15 +32,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: ${{ startsWith(github.head_ref, 'release/') && 'minor' || startsWith(github.head_ref, 'hotfix/') && 'patch' }}
 
-  release:
-    needs: check_if_release_needed
-    if: needs.check_if_release_needed.outputs.new_version != ''
-    runs-on: ubuntu-latest
-    permissions: write-all
-    steps:
       - name: Configure
         run: |
-          cmake -G "Unix Makefiles" -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DVERSION=${{ needs.check_if_release_needed.outputs.new_version }}
+          cmake -G "Unix Makefiles" -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DVERSION=${{ steps.tag_version.outputs.new_version }}
 
       - name: Build
         run: |
@@ -44,7 +43,7 @@ jobs:
       - name: Create Package
         id: build_package
         run: |
-          version=${{ needs.check_if_release_needed.outputs.new_version }}
+          version=${{ steps.tag_version.outputs.new_version }}
           cd build
           cpack -G DEB -D CPACK_DEBIAN_FILE_NAME=DEB-DEFAULT
           package_name=$(ls ${{ env.PROJECT_NAME }}*deb)
