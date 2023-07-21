@@ -28,14 +28,14 @@ jobs:
           default_bump: ${{ startsWith(github.head_ref, 'release/') && 'minor' || startsWith(github.head_ref, 'hotfix/') && 'patch' }}
 
   release:
-    needs: prepare_release
-    if: needs.prepare_release.outputs.new_version != ''
+    needs: check_if_release_needed
+    if: needs.check_if_release_needed.outputs.new_version != ''
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
       - name: Configure
         run: |
-          cmake -G "Unix Makefiles" -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DVERSION=${{ needs.prepare_release.outputs.new_version }}
+          cmake -G "Unix Makefiles" -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DVERSION=${{ needs.check_if_release_needed.outputs.new_version }}
 
       - name: Build
         run: |
@@ -44,7 +44,7 @@ jobs:
       - name: Create Package
         id: build_package
         run: |
-          version=${{ needs.prepare_release.outputs.new_version }}
+          version=${{ needs.check_if_release_needed.outputs.new_version }}
           cd build
           cpack -G DEB -D CPACK_DEBIAN_FILE_NAME=DEB-DEFAULT
           package_name=$(ls ${{ env.PROJECT_NAME }}*deb)
