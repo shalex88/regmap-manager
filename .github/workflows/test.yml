@@ -26,7 +26,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build
+          cmake --build build --target ${{ env.PROJECT_NAME }}_test
 
       - name: Test
         run: cd ./build/$sub_project && ./$bin
@@ -41,7 +41,7 @@ jobs:
           sudo apt-get install lcov
           lcov --capture --directory . --output-file coverage.info
           lcov --remove coverage.info '/usr/*' --output-file coverage.info
-          lcov --remove coverage.info 'tests/*' --output-file coverage.info
+          lcov --remove coverage.info '*/tests/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Upload coverage reports to Codecov
