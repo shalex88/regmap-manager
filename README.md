@@ -1,6 +1,8 @@
 # regmap-manager
 
-[![Build and Run](https://github.com/shalex88/regmap-manager/actions/workflows/test.yml/badge.svg)](https://github.com/shalex88/regmap-manager/actions/workflows/test.yml)
+[![Test](https://github.com/shalex88/regmap-manager/actions/workflows/test.yml/badge.svg)](https://github.com/shalex88/regmap-manager/actions/workflows/test.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/shalex88/regmap-manager)](https://codecov.io/github/shalex88/regmap-manager)
+[![Release](https://img.shields.io/github/v/release/shalex88/regmap-manager.svg)](https://github.com/shalex88/regmap-manager/releases/latest)
 
 ## Current design
 
