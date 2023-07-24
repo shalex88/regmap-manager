@@ -1,5 +1,5 @@
-#ifndef REG_MANAGER_REGISTERSMAPMANAGER_H
-#define REG_MANAGER_REGISTERSMAPMANAGER_H
+#ifndef REGMAP_MANAGER_REGISTERSMAPMANAGER_H
+#define REGMAP_MANAGER_REGISTERSMAPMANAGER_H
 
 #include <memory>
 #include <utility>
@@ -21,10 +21,10 @@ public:
     [[nodiscard]] uint8_t clearBit(REG reg, uint8_t bit_index) const;
     [[nodiscard]] uint8_t getNibble(REG reg, uint8_t nibble_index) const;
     [[nodiscard]] uint8_t setNibble(REG reg, uint8_t nibble_index, uint8_t nibble_value) const;
-    [[nodiscard]] uint32_t resetAll() const;
-    [[nodiscard]] uint32_t clearAll() const;
+    [[nodiscard]] uint8_t resetAll() const;
+    [[nodiscard]] uint8_t clearAll() const;
 private:
     std::shared_ptr<RegisterInterface> register_interface_;
 };
 
-#endif //REG_MANAGER_REGISTERSMAPMANAGER_H
+#endif //REGMAP_MANAGER_REGISTERSMAPMANAGER_H

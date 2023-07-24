@@ -59,22 +59,30 @@ uint8_t RegistersMapManager::setNibble(REG reg, uint8_t nibble_index, uint8_t ni
     return register_interface_->set(g_registers_map[reg].address, reg_value);
 }
 
-uint32_t RegistersMapManager::resetAll() const {
-    uint32_t error{};
+uint8_t RegistersMapManager::resetAll() const {
+    uint8_t result{};
 
     for(auto reg : g_registers_map) {
-        error += register_interface_->set(g_registers_map[reg.first].address, g_registers_map[reg.first].default_value);
+        uint8_t error = register_interface_->set(g_registers_map[reg.first].address, g_registers_map[reg.first].default_value);
+        if (error) {
+            result++;
+            break;
+        }
     }
 
-    return error;
+    return result;
 }
 
-uint32_t RegistersMapManager::clearAll() const {
-    uint32_t error{};
+uint8_t RegistersMapManager::clearAll() const {
+    uint8_t result{};
 
     for(auto reg : g_registers_map) {
-        error += register_interface_->set(g_registers_map[reg.first].address, 0);
+        uint8_t error = register_interface_->set(g_registers_map[reg.first].address, 0);
+        if (error) {
+            result++;
+            break;
+        }
     }
 
-    return error;
+    return result;
 }
