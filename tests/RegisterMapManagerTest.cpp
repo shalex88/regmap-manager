@@ -132,3 +132,23 @@ TEST_F(RegisterMapManagerTest, ClearAllRegisters) {
 
     EXPECT_EQ(register_map->clearAll(), 0);
 }
+
+TEST_F(RegisterMapManagerTest, ResetAllToDefaultFails) {
+    EXPECT_CALL(*register_interface, set(testing::_, testing::_))
+    .WillRepeatedly(testing::Return(0));
+
+    EXPECT_CALL(*register_interface, set(testing::_, testing::_))
+    .WillOnce(testing::Return(1));
+
+EXPECT_EQ(register_map->resetAll(), 1);
+}
+
+TEST_F(RegisterMapManagerTest, ClearAllRegistersFails) {
+    EXPECT_CALL(*register_interface, set(testing::_, testing::_))
+    .WillRepeatedly(testing::Return(0));
+
+    EXPECT_CALL(*register_interface, set(testing::_, testing::_))
+    .WillOnce(testing::Return(1));
+
+EXPECT_EQ(register_map->clearAll(), 1);
+}
