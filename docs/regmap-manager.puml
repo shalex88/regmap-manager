@@ -58,13 +58,12 @@ object UserCode {
 
 'Relations
 UserCode -- RegistersMapManager
-RegistersMapManager o-- RegisterInterface
+RegistersMapManager "Strategy" o-- RegisterInterface
 RegistersMapManager -- Register
 RegistersMapManager -- REG
-RegisterInterface --|> RegisterMock
-RegisterInterface --|> RegisterSpi
-RegisterInterface --|> RegisterDirect
-
+RegisterMock -up-|> RegisterInterface
+RegisterSpi -up-|> RegisterInterface
+RegisterDirect -up-|> RegisterInterface
 
 'Notes
 
