@@ -1,6 +1,10 @@
 #include "RegistersMapManager.h"
 #include "RegistersMap.h"
 
+constexpr uint8_t kMaxBitIndex = 31;
+constexpr uint8_t kMaxNibbleValue = 0xF;
+constexpr uint8_t kMaxNibbleIndex = 7;
+
 uint32_t RegistersMapManager::getValue(REG reg) {
     std::lock_guard<std::mutex> lock(mtx_);
     return register_interface_->get(g_registers_map[reg].address);
@@ -20,7 +24,7 @@ uint8_t RegistersMapManager::clearValue(REG reg) {
 }
 
 uint8_t RegistersMapManager::setBit(REG reg, uint8_t bit_index) {
-    if(bit_index > 31) {
+    if(bit_index > kMaxBitIndex) {
         return 1;
     }
     auto reg_value = getValue(reg);
@@ -30,7 +34,7 @@ uint8_t RegistersMapManager::setBit(REG reg, uint8_t bit_index) {
 }
 
 uint8_t RegistersMapManager::clearBit(REG reg, uint8_t bit_index) {
-    if(bit_index > 31) {
+    if(bit_index > kMaxBitIndex) {
         return 1;
     }
 
@@ -41,7 +45,7 @@ uint8_t RegistersMapManager::clearBit(REG reg, uint8_t bit_index) {
 }
 
 uint8_t RegistersMapManager::getNibble(REG reg, uint8_t nibble_index) {
-    if(nibble_index > 7) {
+    if(nibble_index > kMaxNibbleIndex) {
         return 1;
     }
 
@@ -51,7 +55,7 @@ uint8_t RegistersMapManager::getNibble(REG reg, uint8_t nibble_index) {
 }
 
 uint8_t RegistersMapManager::setNibble(REG reg, uint8_t nibble_index, uint8_t nibble_value) {
-    if(nibble_index > 7 || nibble_value > 0xF) {
+    if(nibble_index > kMaxNibbleIndex || nibble_value > kMaxNibbleValue) {
         return 1;
     }
 
