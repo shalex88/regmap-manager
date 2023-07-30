@@ -1,5 +1,5 @@
-#ifndef REG_MANAGER_REGISTERINTERFACE_H
-#define REG_MANAGER_REGISTERINTERFACE_H
+#ifndef REGMAP_MANAGER_REGISTERINTERFACE_H
+#define REGMAP_MANAGER_REGISTERINTERFACE_H
 
 #include <cstdint>
 
@@ -10,4 +10,4 @@ public:
     virtual uint8_t set(uint32_t address, uint32_t value) = 0;
 };
 
-#endif //REG_MANAGER_REGISTERINTERFACE_H
+#endif //REGMAP_MANAGER_REGISTERINTERFACE_H
