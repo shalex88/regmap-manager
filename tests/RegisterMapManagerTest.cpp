@@ -5,22 +5,6 @@
 #include "RegistersMap.h"
 #include <thread>
 
-// TEST PLAN
-// + Get 32bit register value via the register HW interface
-// + Set register value via the register HW interface, return 1 if ok
-// + Reset register to default value
-// + Clear register to 0
-// + Set specific bit
-// + Get/Set bit with index > 31
-// + Set wrong reg name - Using enum class prevents it
-// + Get nibble value by index
-// + Set nibble value by index
-// + Get/Set wrong nibble index
-// + Set wrong nibble value > 0xF
-// + Reset all registers to default
-// + Clear all registers
-// + Test for multithreading support
-
 class RegisterMock : public RegisterInterface {
 public:
     MOCK_METHOD1(get, uint32_t(uint32_t address));
@@ -191,4 +175,15 @@ TEST_F(RegisterMapManagerTest, SetRegisterValueThreadSafety) {
     thread2.join();
 
     EXPECT_EQ(error_flag.load(), false);
+}
+
+TEST_F(RegisterMapManagerTest, GetDefaultRegisterValue) {
+    EXPECT_EQ(p_registers_manager->getDefaultValue(REG::VIDEO), 0x1);
+}
+
+TEST_F(RegisterMapManagerTest, ResisterManagersCanReceiveDifferentMaps) {
+    auto p_registers_manager2 = std::make_shared<RegistersMapManager>(p_register_interface, p_registers_map2);
+
+    EXPECT_NE(p_registers_manager->getDefaultValue(REG::VIDEO), p_registers_manager2->getDefaultValue(REG::VIDEO));
+
 }

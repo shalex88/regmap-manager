@@ -15,6 +15,7 @@ public:
     }
     ~RegistersMapManager() = default;
 
+    [[nodiscard]] uint32_t getDefaultValue(REG reg);
     [[nodiscard]] uint32_t getValue(REG reg);
     [[nodiscard]] uint8_t setValue(REG reg, uint32_t value);
     [[nodiscard]] uint8_t resetValue(REG reg);

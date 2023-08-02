@@ -4,6 +4,10 @@ constexpr uint8_t kMaxBitIndex = 31;
 constexpr uint8_t kMaxNibbleValue = 0xF;
 constexpr uint8_t kMaxNibbleIndex = 7;
 
+uint32_t RegistersMapManager::getDefaultValue(REG reg) {
+    return (*p_registers_map_)[reg].default_value;
+}
+
 uint32_t RegistersMapManager::getValue(REG reg) {
     std::lock_guard<std::mutex> lock(mtx_);
     return p_register_interface_->get((*p_registers_map_)[reg].address);
