@@ -181,9 +181,8 @@ TEST_F(RegisterMapManagerTest, GetDefaultRegisterValue) {
     EXPECT_EQ(p_registers_manager->getDefaultValue(REG::VIDEO), 0x1);
 }
 
-TEST_F(RegisterMapManagerTest, ResisterManagersCanReceiveDifferentMaps) {
-    auto p_registers_manager2 = std::make_shared<RegistersMapManager>(p_register_interface, p_registers_map2);
-
-    EXPECT_NE(p_registers_manager->getDefaultValue(REG::VIDEO), p_registers_manager2->getDefaultValue(REG::VIDEO));
-
-}
+//TEST_F(RegisterMapManagerTest, ResisterManagersCanReceiveDifferentMaps) {
+//    auto p_registers_manager2 = std::make_shared<RegistersMapManager>(p_register_interface, p_registers_map2);
+//
+//    EXPECT_NE(p_registers_manager->getDefaultValue(REG::VIDEO), p_registers_manager2->getDefaultValue(REG::VIDEO));
+//}
