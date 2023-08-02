@@ -1,5 +1,4 @@
 #include "RegistersMapManager.h"
-#include "RegistersMap.h"
 
 constexpr uint8_t kMaxBitIndex = 31;
 constexpr uint8_t kMaxNibbleValue = 0xF;
@@ -7,16 +6,16 @@ constexpr uint8_t kMaxNibbleIndex = 7;
 
 uint32_t RegistersMapManager::getValue(REG reg) {
     std::lock_guard<std::mutex> lock(mtx_);
-    return register_interface_->get(g_registers_map[reg].address);
+    return p_register_interface_->get((*p_registers_map_)[reg].address);
 }
 
 uint8_t RegistersMapManager::setValue(REG reg, uint32_t value) {
     std::lock_guard<std::mutex> lock(mtx_);
-    return register_interface_->set(g_registers_map[reg].address, value);
+    return p_register_interface_->set((*p_registers_map_)[reg].address, value);
 }
 
 uint8_t RegistersMapManager::resetValue(REG reg) {
-    return setValue(reg, g_registers_map[reg].default_value);
+    return setValue(reg, (*p_registers_map_)[reg].default_value);
 }
 
 uint8_t RegistersMapManager::clearValue(REG reg) {
@@ -68,8 +67,8 @@ uint8_t RegistersMapManager::setNibble(REG reg, uint8_t nibble_index, uint8_t ni
 uint8_t RegistersMapManager::resetAll() {
     uint8_t result{};
 
-    for(auto reg : g_registers_map) {
-        uint8_t error = setValue(reg.first, g_registers_map[reg.first].default_value);
+    for(auto reg : *p_registers_map_) {
+        uint8_t error = setValue(reg.first, (*p_registers_map_)[reg.first].default_value);
         if (error) {
             result++;
             break;
@@ -82,7 +81,7 @@ uint8_t RegistersMapManager::resetAll() {
 uint8_t RegistersMapManager::clearAll() {
     uint8_t result{};
 
-    for(auto reg : g_registers_map) {
+    for(auto reg : *p_registers_map_) {
         uint8_t error = setValue(reg.first, 0);
         if (error) {
             result++;

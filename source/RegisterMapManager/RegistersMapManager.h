@@ -4,13 +4,14 @@
 #include <memory>
 #include <utility>
 #include <mutex>
+#include <unordered_map>
 #include "RegisterInterface.h"
 #include "Registers.h"
 
 class RegistersMapManager {
 public:
-    explicit RegistersMapManager(std::shared_ptr<RegisterInterface> reg_interface)
-        : register_interface_(std::move(reg_interface)) {
+    explicit RegistersMapManager(std::shared_ptr<RegisterInterface> p_reg_interface, std::shared_ptr<RegistersMap> p_registers_map)
+        : p_register_interface_(std::move(p_reg_interface)), p_registers_map_(std::move(p_registers_map)) {
     }
     ~RegistersMapManager() = default;
 
@@ -25,7 +26,8 @@ public:
     [[nodiscard]] uint8_t resetAll();
     [[nodiscard]] uint8_t clearAll();
 private:
-    std::shared_ptr<RegisterInterface> register_interface_;
+    std::shared_ptr<RegisterInterface> p_register_interface_;
+    std::shared_ptr<RegistersMap> p_registers_map_;
     std::mutex mtx_;
 };
 
